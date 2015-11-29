@@ -16,12 +16,15 @@
  */
 package org.jboss.as.quickstart.hibernate4.util;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.logging.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 
 /**
  * This class uses CDI to alias Java EE resources, such as the persistence context, to CDI beans
@@ -46,6 +49,20 @@ public class Resources {
     @RequestScoped
     public FacesContext produceFacesContext() {
         return FacesContext.getCurrentInstance();
+    }
+    
+    @Produces
+    @Named
+    public String getHostIpAddress()
+	{
+	    	InetAddress ip;
+		try {
+			ip = InetAddress.getLocalHost();
+			return ip.getHostAddress();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		return "IP Not Found";
     }
 
 }
